@@ -5,10 +5,8 @@ import cors from "cors";
 import router from "./Routes/Route.js";
 import connectDB from "./Config/DBconnect.js";
 
-
-
 if (!process.env.MONGO_URI) {
-  throw new Error("MONGODB_URI environment variable is required");
+  throw new Error("MONGO_URI environment variable is required");
 }
 
 if (!process.env.JWT_SECRET) {
@@ -18,9 +16,28 @@ if (!process.env.JWT_SECRET) {
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Flexible CORS for development
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+  'http://localhost:5000',
+  'http://127.0.0.1:5174',
+  'assembledbookings.netlify.app'
+];
+
 app.use(cors({
-    origin: 'http://localhost:5173'
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
+
 app.use(express.json());
 
 connectDB();
@@ -34,10 +51,11 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on localhost:${PORT}`);
+  console.log(` Server is running on http://localhost:${PORT}`);
+  console.log(` Allowed origins: ${allowedOrigins.join(', ')}`);
 });
 
 process.on('unhandledRejection', (err) => {
-  console.error('Unhandled Rejection:', err);
+  console.error(' Unhandled Rejection:', err);
   process.exit(1);
 });

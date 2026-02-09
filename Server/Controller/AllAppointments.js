@@ -15,11 +15,7 @@ export const getAllAppointments = async (req, res) => {
           fullName: apt.fullName,
           email: apt.email,
           phoneNumber: apt.phoneNumber,
-          packageName: apt.packageName,
-          date: apt.date?.toISOString().slice(0, 10) || null,
-          tutor: apt.tutor,
-          createdAt: apt.createdAt || null,
-          updatedAt: apt.updatedAt || null,
+          chapters: apt.chapters,
         })),
       },
     });
