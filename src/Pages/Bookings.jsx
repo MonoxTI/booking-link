@@ -58,7 +58,7 @@ export default function Bookings() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/appointment", {
+      const res = await fetch("/api/appointment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
